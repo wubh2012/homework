@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  当前账户的金额是: <span id="spanAmount">{{amount}}</span>
+  <button id="pay">付款</button>
+  <script src="./main.js"></script>
+  <script>
+    let btnPay = document.querySelector('#pay')
+    let amount = document.querySelector('#spanAmount')
+
+
+    btnPay.addEventListener('click', function (e) {
+      
+      let randomCallbackName = `xxxxxx${ parseInt(Math.random() * 100000000)}`
+      window[randomCallbackName] = function (r) {
+        console.log('回调结果', r)
+        if (r.success) {
+          amount.innerText = amount.innerText - 1
+        }
+      }
+
+      let xxscript = document.createElement('script')
+      xxscript.src = './pay?callback=' + randomCallbackName
+      document.body.appendChild(xxscript)
+
+      xxscript.onload = function (e) {
+        document.body.removeChild(e.currentTarget)
+      }
+      xxscript.onerror = function (e) {
+        console.log('script onerror', e)
+      }
+    })
+  </script>
+</body>
+
+</html>
